@@ -35,7 +35,13 @@
     methods: {
       async submit(){
         const res = await LoginApi.getTest();
-        window.console.log(res);
+        if(res.errcode === 0){
+          // 保存token
+          window.localStorage.setItem('token', res.data);
+          this.$router.push({
+            name: 'home'
+          })
+        }
       }
     }
   }

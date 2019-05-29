@@ -2,6 +2,8 @@ import Router from 'vue-router';
 
 import Login from './modules/login'
 
+import Home from './modules/home'
+
 const router = new Router({
   mode: 'history',
   routes:[
@@ -9,7 +11,8 @@ const router = new Router({
       path: '/',
       redirect: { name: 'login' }
     },
-    ...Login
+    ...Login,
+    ...Home
   ]
 })
 

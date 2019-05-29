@@ -1,8 +1,15 @@
 import axios from 'axios';
 
+const host ='http://127.0.0.1:9000';
 
 // 请求拦截器
 axios.interceptors.request.use((config) => {
+  config.url = `${host}${config.url}`;
+
+  const token = window.localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 }, error => Promise.reject(error));
 
@@ -10,6 +17,7 @@ axios.interceptors.request.use((config) => {
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
+    console.log(response);
     return response.data;
   } 
   ,
