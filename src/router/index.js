@@ -1,8 +1,8 @@
 import Router from 'vue-router';
 
 import Login from './modules/login'
-
-import Home from './modules/home'
+import Product from './modules/product';
+import Order from './modules/order';
 
 const router = new Router({
   mode: 'history',
@@ -11,8 +11,14 @@ const router = new Router({
       path: '/',
       redirect: { name: 'login' }
     },
+    {
+      path: '/home',
+      name: 'home',
+      component: () => import('@/views/home.vue')
+    },
     ...Login,
-    ...Home
+    ...Product,
+    ...Order
   ]
 })
 
