@@ -37,7 +37,9 @@
         const res = await LoginApi.getTest();
         if(res.errcode === 0){
           // 保存token
-          window.localStorage.setItem('token', res.data);
+          const { token, exp } = res.data;
+          localStorage.setItem('token', token);
+          localStorage.setItem('exp', exp);
           this.$router.push({
             name: 'home'
           })
