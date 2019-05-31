@@ -47,6 +47,11 @@
       &-left, &-right{
         height: 100%;
       }
+      &-right {
+        width: calc( 100% - 200px );
+        padding: 16px;
+        box-sizing: border-box;
+      }
     }
   }
 </style>

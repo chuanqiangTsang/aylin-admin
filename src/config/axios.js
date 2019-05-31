@@ -17,7 +17,6 @@ axios.interceptors.request.use((config) => {
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response);
     return response.data;
   } 
   ,

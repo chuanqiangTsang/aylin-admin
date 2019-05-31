@@ -12,9 +12,7 @@
           <template slot="title">
             <span>产品管理</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item index="/product/list">产品列表</el-menu-item>
-          </el-menu-item-group>
+          <el-menu-item index="/product/list">产品列表</el-menu-item>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -27,14 +25,13 @@
   </div>
 </template>
 <script>  
-  import { Menu, Submenu,  MenuItem, MenuItemGroup } from 'element-ui' 
+  import { Menu, Submenu, MenuItem } from 'element-ui' 
   export default {
     name: "app-aside",
     components: {
       ElMenu: Menu,
       ElSubmenu: Submenu,
-      ElMenuItem: MenuItem,
-      ElMenuItemGroup: MenuItemGroup
+      ElMenuItem: MenuItem
     }
   }
 </script>
