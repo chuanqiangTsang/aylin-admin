@@ -2,8 +2,12 @@ import axios from '@/config/axios';
 
 // 测试一下
 export default {
-  getTest(){
-    return axios.get('/system/login');
+  login(params){
+    return axios.post('/system/login', params);
+  },
+
+  logout(){
+    return axios.get('/system/logout');
   },
 
   testjwt(){

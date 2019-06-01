@@ -11,11 +11,6 @@ const router = new Router({
       path: '/',
       redirect: { name: 'login' }
     },
-    {
-      path: '/home',
-      name: 'home',
-      component: () => import('@/views/home.vue')
-    },
     ...Login,
     ...Product,
     ...Order

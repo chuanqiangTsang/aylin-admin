@@ -4,8 +4,11 @@ import Router from 'vue-router';
 
 import router from './router'
 
+import './config/element-ui'
+
 // 引入初始化文件
 import './styles/base.less';
+
 
 Vue.config.productionTip = false
 

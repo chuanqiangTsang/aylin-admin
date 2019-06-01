@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const host ='http://127.0.0.1:9000';
+axios.defaults.withCredentials = true; // 
+
+const host = process.env.NODE_ENV === "debug" ?  'http://127.0.0.1:9000' : 'todo';
 
 // 请求拦截器
 axios.interceptors.request.use((config) => {

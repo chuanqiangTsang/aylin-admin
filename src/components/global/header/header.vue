@@ -11,7 +11,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><i class="el-icon-user"></i> 个人信息</el-dropdown-item>
-          <el-dropdown-item divided><i class="el-icon-remove"></i> 退出登录</el-dropdown-item>
+          <el-dropdown-item divided> <div @click="logout"> <i class="el-icon-remove"></i> 退出登录</div></el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -19,14 +19,29 @@
 </template>
 
 <script>
-  import { Dropdown, DropdownMenu, DropdownItem } from 'element-ui'
+  import { Dropdown, DropdownMenu, DropdownItem } from 'element-ui';
+  import systemApi from '@/apis/system';
+
   export default {
-  name: "app-header",
-  components: {
-    ElDropdown: Dropdown,
-    ElDropdownMenu: DropdownMenu,
-    ElDropdownItem: DropdownItem
-  }
+    name: "app-header",
+    components: {
+      ElDropdown: Dropdown,
+      ElDropdownMenu: DropdownMenu,
+      ElDropdownItem: DropdownItem
+    },
+    methods: {
+      async logout(){
+        const res = await systemApi.logout();
+        console.log(res);
+        if (res.errcode === 0) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('exp');
+          this.$router.push({
+            name: 'login'
+          })
+        }
+      }
+    }
   }
 </script>
 
