@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.withCredentials = true; // 
+axios.defaults.withCredentials = true; // 请求默认带上cookir
 
 const host = process.env.NODE_ENV === "debug" ?  'http://127.0.0.1:9000' : 'todo';
 
