@@ -9,6 +9,11 @@ export default [
                 path: 'list',
                 name: 'product-list',
                 component: () => import('@/views/product/product-list.vue')
+            },
+            {
+                path: 'add',
+                name: 'add-product',
+                component: () => import('@/views/product/add-product.vue')
             }
         ]
     }

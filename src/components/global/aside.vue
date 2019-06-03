@@ -3,16 +3,17 @@
     <h3 class="aside-title">产品管理</h3>
     <div class="menu">
       <el-menu
-        default-active="/product/list"
+        :default-active="curPage"
         background-color="#001529"
         text-color="#fff"
         router
       >
         <el-submenu index="1">
           <template slot="title">
-            <span>产品管理</span>
+            <span>商品管理</span>
           </template>
-          <el-menu-item index="/product/list">产品列表</el-menu-item>
+          <el-menu-item index="/product/list">商品列表</el-menu-item>
+          <el-menu-item index="/product/add">新增商品</el-menu-item>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -32,6 +33,12 @@
       ElMenu: Menu,
       ElSubmenu: Submenu,
       ElMenuItem: MenuItem
+    },
+    computed: {
+      curPage(){
+        const { path } = this.$route;
+        return path;
+      }
     }
   }
 </script>

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true; // 请求默认带上cookir
 
-const host = process.env.NODE_ENV === "debug" ?  'http://127.0.0.1:9000' : 'todo';
+const host = process.env.VUE_APP_HOST;
 
 // 请求拦截器
 axios.interceptors.request.use((config) => {
