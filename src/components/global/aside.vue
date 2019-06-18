@@ -14,6 +14,7 @@
           </template>
           <el-menu-item index="/product/list">商品列表</el-menu-item>
           <el-menu-item index="/product/add">新增商品</el-menu-item>
+          <el-menu-item index="/product/add-category">商品分类</el-menu-item>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">

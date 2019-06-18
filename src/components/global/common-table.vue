@@ -9,6 +9,7 @@
           size="small"
           header-row-class-name="common-table-header"
           :height="tableHeight"
+          :row-key="rowKey"
         >
           <el-table-column
             v-for="(item, index) in  columns" 
@@ -17,7 +18,7 @@
             :key="index"
           >
             <template slot-scope="scope">
-              <slot :name="item.slotScope" :row="scope" v-if="item.slotScope"></slot>
+              <slot :name="item.slotScope" :row="scope.row" v-if="item.slotScope"></slot>
               <span v-else>{{ scope.row[item.dataIndex] }}</span>
             </template>
           </el-table-column>
@@ -46,7 +47,7 @@
       ElTableColumn: TableColumn,
       ElPagination: Pagination,
     },
-    props: ["tableData", "columns", "showTop"],
+    props: ["tableData", "columns", "showTop", "rowKey"],
     data(){
       return {
         tableHeight: 0

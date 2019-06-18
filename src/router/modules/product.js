@@ -14,6 +14,11 @@ export default [
                 path: 'add',
                 name: 'add-product',
                 component: () => import('@/views/product/add-product.vue')
+            },
+            {
+                path: 'add-category',
+                name: 'add-category',
+                component: () => import('@/views/product/add-category.vue')
             }
         ]
     }
