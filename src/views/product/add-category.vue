@@ -29,6 +29,7 @@
   import ContentTop from '@/components/global/content-top.vue';
   import CateDialog from './dialog/add-cate.vue';
   import CommonTable from '@/components/global/common-table.vue';
+  import ProductApi from '@/apis/product';
   import { 
     Button, Checkbox, MessageBox
   } from 'element-ui';
@@ -112,7 +113,7 @@
           this.tableData.splice(index, 1);
         })
       },  
-      onCateOk(data){
+      async onCateOk(data){
         if(data.id) { // 修改
           const index = this.tableData.findIndex(item => item.id === data.id);
           this.tableData[index] = data;
@@ -129,6 +130,8 @@
 
           window.console.log(this.tableData);
         } else { // 新增
+          const res = ProductApi.addCategory(data);
+          
           this.tableData.push(data);
         }
       }
