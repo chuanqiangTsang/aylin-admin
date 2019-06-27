@@ -25,6 +25,11 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response) {
       // error.response.status  200 401
+      const { status } = error.response;
+      switch(status) {
+        case 401:
+          window.location.href = '/login'
+      }
     }
     return Promise.reject(error);
   }

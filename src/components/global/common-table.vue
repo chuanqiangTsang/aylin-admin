@@ -16,6 +16,8 @@
             :prop="item.dataIndex"
             :label="item.label"
             :key="index"
+            :align="item.align"
+            :width="item.width"
           >
             <template slot-scope="scope">
               <slot :name="item.slotScope" :row="scope.row" v-if="item.slotScope"></slot>
@@ -32,8 +34,11 @@
       <div class="pager" ref="tablePager">
         <el-pagination
           layout="prev, pager, next"
-          :total="50"
+          :total="total"
+          :hide-on-single-page="isHide"
           background
+          @current-change="pageChange"
+          :page-size="20"
         ></el-pagination>
       </div>
     </div>
@@ -47,10 +52,15 @@
       ElTableColumn: TableColumn,
       ElPagination: Pagination,
     },
-    props: ["tableData", "columns", "showTop", "rowKey"],
+    props: ["tableData", "columns", "showTop", "rowKey", "total"],
     data(){
       return {
         tableHeight: 0
+      }
+    },
+    computed: {
+      isHide(){
+        return this.total === 1;
       }
     },
     methods: {
@@ -58,9 +68,12 @@
         this.$nextTick(() => {
           const Height = this.$refs.tableList.clientHeight - 32;
           const topHeight = this.showTop ? this.$refs.tableTop.clientHeight + 20 : 0;
-          const pagerHeight = this.$refs.tablePager.clientHeight + 16;
+          const pagerHeight = this.total > 1 ? this.$refs.tablePager.clientHeight + 16 : 0;
           this.tableHeight = Height - topHeight - pagerHeight;
         })
+      },
+      pageChange(page){
+        this.$emit('page-change', page)
       }
     },
     mounted(){

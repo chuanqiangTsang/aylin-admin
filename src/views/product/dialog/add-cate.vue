@@ -66,6 +66,9 @@
         }
       }
     },
+    mounted(){
+      window.console.log('mounted');
+    },
     watch:{
       data(val){
         if (val) { // 弹窗展示
@@ -83,8 +86,8 @@
       close(){
         this.$emit('input', false);
         this.$emit('update:parentCate', '');
-        setTimeout(this.reset, 500);
-        this.reset();
+        // setTimeout(this.reset, 500);
+        // this.reset();
       },
       confirm(){
         if (this.parentCate) {

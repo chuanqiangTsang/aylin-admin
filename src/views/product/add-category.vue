@@ -5,18 +5,20 @@
         :tableData="tableData"
         :columns="columns"
         :showTop="true"
+        :total="total"
         rowKey="id"
+        @page-change="pageChange"
       >
         <template slot="tableTop">
            <el-button type="primary" @click="addNewCate">添加新类目</el-button>
         </template>
 
         <template slot="status" scope="scope">
-          <el-checkbox v-model="scope.row.status"></el-checkbox>
+          <el-checkbox v-model="scope.row.active" @change="onStatusChange(scope)"></el-checkbox>
         </template>
 
         <template slot="operation" scope="scope">
-          <el-button v-if="!scope.row.isChildren" type="primary" icon="plus" size="mini" @click="addSubCate(scope)">添加子类目</el-button>
+          <el-button v-if="!scope.row.isChild" type="primary" icon="plus" size="mini" @click="addSubCate(scope)">添加子类目</el-button>
           <i class="op-icon el-icon-edit-outline" @click="edit(scope)"></i>
           <i class="op-icon del el-icon-delete-solid" @click="del(scope)"></i>
         </template>
@@ -29,7 +31,7 @@
   import ContentTop from '@/components/global/content-top.vue';
   import CateDialog from './dialog/add-cate.vue';
   import CommonTable from '@/components/global/common-table.vue';
-  import ProductApi from '@/apis/product';
+  import productApi from '@/apis/product';
   import { 
     Button, Checkbox, MessageBox
   } from 'element-ui';
@@ -47,35 +49,20 @@
         visible: false,
         parentCate: '',
         parentId: '', // 父级id，添加子类用
-        tableData: [
-          {
-            index: 0,
-            id: 1,
-            cateName: '男装',
-            status: true,
-            orderNum: 10,
-            hasChildren: true,
-            children: []
-          },
-          {
-            index: 0,
-            id: 2,
-            cateName: '女装',
-            status: false,
-            orderNum: 9
-          }
-        ],
+        tableData: [],
         columns: [
            {
             dataIndex: 'index',
-            label:"序号"
+            label:"序号",
+            align: 'center',
+            width: 60
           },
           {
             dataIndex: 'cateName',
             label: "分类名称"
           },
           {
-            dataIndex: 'status',
+            dataIndex: 'active',
             label: '状态',
             slotScope: 'status'
           },
@@ -85,10 +72,47 @@
             slotScope: 'operation'
           }
         ],
-        cateData: ''
+        cateData: '',
+        total: 50, // 总条数,
+        curPage: 1
       }
     },
+    mounted(){
+      this.getCategory();
+    },
     methods: {
+
+      /** 
+       * 获取分类
+      */
+     async getCategory(parentId){
+       const params = {
+         page: this.curPage,
+         parentId
+       }
+       const res = await productApi.getCategory(params);
+       if (res.errcode === 0) {
+         const { list, total } = res.data;
+         list.forEach((item, index) => {
+           item.index = index + 1;
+         });
+
+         this.tableData = list;
+         this.total = total;
+       }
+     },
+
+     async onStatusChange(scope){ 
+       const  { id, active } = scope.row;
+       const params = { id, status: active }
+       const res = await productApi.updateStatus(params);
+       if (res.errcode === 0) {
+         this.$message.success('更新状态成功');
+       } else {
+         this.$message.error('更新状态失败');
+       }
+     },
+
       addNewCate(){
         this.visible = true;
       },
@@ -99,6 +123,7 @@
         this.visible = true;
       },
       edit(scope){
+        this.cateData = {};
         const { row } = scope;
         this.cateData = row;
         this.visible = true;
@@ -107,16 +132,35 @@
       del(scope){
         MessageBox.confirm('确定删除这个类目吗？','提示',{
           type: 'warning'
-        }).then(() => {
-          const { row } = scope;
-          const index = row.index;
-          this.tableData.splice(index, 1);
+        }).then(async () => {
+          const { id } = scope.row;
+          const res = await productApi.delete(id);
+          if (res.errcode === 0) {
+            this.$message.success('删除成功');
+            this.getCategory();
+          } else {
+            this.$message.error('删除失败');
+          }
         })
-      },  
+      }, 
+      async handleUpdate(params){
+        const res = await productApi.update(params);
+        if (res.errcode === 0) {
+          this.$message.success('更新成功');
+          this.getCategory();
+        } else {
+          this.$message.success('更新失败');
+        }
+      },
       async onCateOk(data){
         if(data.id) { // 修改
-          const index = this.tableData.findIndex(item => item.id === data.id);
-          this.tableData[index] = data;
+          const { id, cateName, orderNum } = data;
+          const params = {
+            id,
+            cateName,
+            orderNum
+          } 
+          this.handleUpdate(params);
         } else if(data.isAddSubCate) { // 添加子类
           const index = this.tableData.findIndex(item => item.id === this.parentId);
           this.tableData[index].children.push({
@@ -130,10 +174,15 @@
 
           window.console.log(this.tableData);
         } else { // 新增
-          const res = ProductApi.addCategory(data);
-          
-          this.tableData.push(data);
+          const res = await productApi.addCategory(data);
+          if (res.errcode === 0) {
+            this.getCategory();
+          }
         }
+      },
+      pageChange(page){
+        this.curPage = page;
+        this.getCategory();
       }
     }
   }
