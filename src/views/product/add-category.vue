@@ -1,17 +1,17 @@
 <template>
   <div class="add-cate">
-     <ContentTop title="商品分类" />
+     <content-top title="商品分类">
+        <template slot="right">
+           <el-button type="text" @click="addNewCate" size="mini">+ 添加新类目</el-button>
+        </template>
+     </content-top>
        <common-table
         :tableData="tableData"
         :columns="columns"
-        :showTop="true"
         :total="total"
         rowKey="id"
         @page-change="pageChange"
       >
-        <template slot="tableTop">
-           <el-button type="primary" @click="addNewCate">添加新类目</el-button>
-        </template>
 
         <template slot="status" scope="scope">
           <el-checkbox v-model="scope.row.active" @change="onStatusChange(scope)"></el-checkbox>
@@ -152,6 +152,25 @@
           this.$message.success('更新失败');
         }
       },
+      async handleAddSubCate(data){
+        const { cateName, orderNum } = data;
+        const { parentId } = this;
+        const params = {
+          cateName,
+          orderNum,
+          parentId: parentId
+        };
+
+        const res = await productApi.addSubCate(params);
+        if (res.errcode === 0) {
+          this.$message.success('添加子类成功');
+          setTimeout(() => {
+            this.getCategory();
+          }, 500);
+        } else {
+          this.$message.error('添加子类失败');
+        }
+      },
       async onCateOk(data){
         if(data.id) { // 修改
           const { id, cateName, orderNum } = data;
@@ -162,17 +181,7 @@
           } 
           this.handleUpdate(params);
         } else if(data.isAddSubCate) { // 添加子类
-          const index = this.tableData.findIndex(item => item.id === this.parentId);
-          this.tableData[index].children.push({
-              index: 89,
-              id: 9090,
-              cateName: data.cateName,
-              status: true,
-              orderNum: data.orderNum,
-              hasChildren: false,
-          });
-
-          window.console.log(this.tableData);
+          this.handleAddSubCate(data);
         } else { // 新增
           const res = await productApi.addCategory(data);
           if (res.errcode === 0) {

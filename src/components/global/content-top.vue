@@ -1,6 +1,9 @@
 <template>
   <div class="content-top">
     <h3>{{ title }}</h3>
+    <div class="content-top-right">
+      <slot name="right" />
+    </div>
   </div>
 </template>
 <script>
@@ -13,5 +16,12 @@
   .content-top {
     text-align: left;
     margin-bottom: 16px;
+    position: relative;
+    &-right {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
 </style>

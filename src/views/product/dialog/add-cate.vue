@@ -78,16 +78,17 @@
     },
     methods: {
       reset(){
-        this.formData = {
-          cateName: '',
-          orderNum: 0
+        if (!this.parentCate) {
+          this.formData = {
+            cateName: '',
+            orderNum: 0
+          }
         }
       },
       close(){
         this.$emit('input', false);
         this.$emit('update:parentCate', '');
-        // setTimeout(this.reset, 500);
-        // this.reset();
+        setTimeout(this.reset, 500);
       },
       confirm(){
         if (this.parentCate) {
@@ -100,7 +101,6 @@
   }
 </script>
 <style lang="less">
-   @import '../../../styles/common.less';
    .add-cate-dialog {
      .el-input {
         width: 360px;

@@ -23,5 +23,9 @@ export default {
 
   delete(id){
     return axios.delete(`${path}/delete`, {params: {id}})
+  },
+
+  addSubCate(params){
+    return axios.post(`${path}/addSubCate`, params);
   }
 }
